@@ -1,0 +1,5 @@
+{
+  "name": "Change Your Search",
+  "description": "A customizable search tool that automatically transforms your queries with custom context, providing AI-powered insights and a personal search history.",
+  "requestFramePermissions": []
+}
