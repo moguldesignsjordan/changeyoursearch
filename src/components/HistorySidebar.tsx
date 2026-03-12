@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SearchRecord } from '../types';
+import { SearchRecord } from '../../types';
 
 interface HallOfRecordsModalProps {
   records: SearchRecord[];

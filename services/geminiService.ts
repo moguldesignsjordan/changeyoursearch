@@ -3,7 +3,6 @@ import { SearchResult, SearchSource } from "../types";
 
 // Gemini AI Service
 export const performGroundedSearch = async (query: string): Promise<SearchResult> => {
-  // FIX: Per coding guidelines, API key must be from process.env.API_KEY directly.
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   try {
@@ -58,7 +57,6 @@ export const performGroundedSearch = async (query: string): Promise<SearchResult
 export const generatePhraseSuggestions = async (topic: string): Promise<string[]> => {
   if (!topic.trim()) return [];
   
-  // FIX: Per coding guidelines, API key must be from process.env.API_KEY directly.
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   try {

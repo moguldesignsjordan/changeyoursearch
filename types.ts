@@ -5,7 +5,6 @@ export enum SearchEngine {
   ECOSIA = 'Ecosia'
 }
 
-// FIX: Added SearchSource and SearchResult types to resolve compilation errors.
 export interface SearchSource {
   title: string;
   uri: string;
@@ -29,12 +28,11 @@ export interface SearchRecord {
 
 // A single search instance within a record.
 export interface SearchHistoryItem {
-  id:string;
+  id: string;
   query: string; // The specific search term used for this instance (without appended phrase)
   augmentedQuery: string;
   timestamp: number;
   engine: SearchEngine;
-  // FIX: Added optional result property to store AI-generated summaries.
   result?: SearchResult;
 }
 

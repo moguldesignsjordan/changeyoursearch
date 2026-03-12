@@ -1,4 +1,3 @@
-
 import { SearchEngine } from './types';
 
 export const ENGINE_URLS: Record<SearchEngine, string> = {
@@ -8,4 +7,4 @@ export const ENGINE_URLS: Record<SearchEngine, string> = {
   [SearchEngine.ECOSIA]: 'https://www.ecosia.org/search?q=',
 };
 
-export const DEFAULT_PHRASE = "metaphysical properties of";
+export const DEFAULT_PHRASE = 'peer reviewed';

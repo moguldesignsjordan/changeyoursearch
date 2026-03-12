@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchHistoryItem } from '../types';
+import { SearchHistoryItem } from '../../types';
 
 interface SearchResultDisplayProps {
   searchItem: SearchHistoryItem | null;

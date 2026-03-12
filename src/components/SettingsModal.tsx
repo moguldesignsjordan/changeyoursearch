@@ -1,6 +1,6 @@
 import React from 'react';
-import { UserSettings, SearchEngine } from '../types';
-import type { User } from '@supabase/supabase-js';
+import { UserSettings, SearchEngine } from '../../types';
+import type { User } from '../firebase';
 
 interface SettingsModalProps {
   settings: UserSettings;
@@ -29,7 +29,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSe
               </label>
               <div className="flex items-center justify-between p-4 bg-black/30 rounded-2xl border border-white/10">
                 <p className="text-sm font-bold text-white truncate" title={user.email || 'Signed in user'}>
-                  {user.user_metadata?.full_name || user.email}
+                  {user.displayName || user.email}
                 </p>
                 <button 
                   onClick={onLogout} 

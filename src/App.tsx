@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Layout } from './Layout';
-import { HallOfRecordsModal } from './HistorySidebar';
-import { SettingsModal } from './SettingsModal';
-import { SearchRecord, SearchHistoryItem, UserSettings, SearchEngine } from './types';
-import { ENGINE_URLS, DEFAULT_PHRASE } from './constants';
-import { LoginView } from './LoginView';
+import { HallOfRecordsModal } from './components/HistorySidebar';
+import { SettingsModal } from './components/SettingsModal';
+import { SearchRecord, SearchHistoryItem, UserSettings, SearchEngine } from '../types';
+import { ENGINE_URLS, DEFAULT_PHRASE } from '../constants';
+import { LoginView } from './components/LoginView';
 import { 
   auth, 
   onAuthStateChanged, 
@@ -17,9 +17,13 @@ import {
 
 
 const Logo = () => (
-    <div className="absolute top-4 left-4 w-24 h-24 pointer-events-none">
-      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYCAYAAACHsH81AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAA..." alt="Change Your Search Logo" className="w-full h-full" />
-    </div>
+  <div className="absolute top-4 left-4 w-24 h-24 pointer-events-none">
+    <img 
+      src="/metalogo.png" 
+      alt="Change Your Search Logo" 
+      className="w-full h-full" 
+    />
+  </div>
 );
 
 const ChangeTextModal = ({ currentText, onSave, onClose }: { currentText: string, onSave: (text: string) => void, onClose: () => void }) => {

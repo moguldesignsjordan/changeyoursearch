@@ -1,5 +1,6 @@
-// LoginView.tsx
-import { useState } from "react";
+import React, { useState } from "react";
+import { auth, googleProvider } from "../firebase";  // Go up one level to src/firebase.ts
+import { signInWithPopup } from "firebase/auth";
 
 interface LoginViewProps {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -10,6 +11,7 @@ interface LoginViewProps {
   showVerificationMessage: boolean;
   emailForVerification: string;
   onBackToLogin: () => void;
+  onGoogleLogin: (user: any) => Promise<void>;  // Pass Google user data after login
 }
 
 export const LoginView: React.FC<LoginViewProps> = ({
@@ -21,6 +23,7 @@ export const LoginView: React.FC<LoginViewProps> = ({
   showVerificationMessage,
   emailForVerification,
   onBackToLogin,
+  onGoogleLogin,
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,6 +52,17 @@ export const LoginView: React.FC<LoginViewProps> = ({
     setIsLoading(true);
     await onResendVerification(emailForVerification);
     setIsLoading(false);
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      // Pass the authenticated Google user to the parent
+      onGoogleLogin(user);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // Verification message screen
@@ -152,6 +166,16 @@ export const LoginView: React.FC<LoginViewProps> = ({
             className="text-stone-400 hover:text-orange-400 transition-colors"
           >
             {isRegistering ? "Already have an account? Sign in" : "Don't have an account? Sign up"}
+          </button>
+        </div>
+
+        {/* Google Login Button */}
+        <div className="mt-4 text-center">
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold transition-colors"
+          >
+            Sign in with Google
           </button>
         </div>
       </div>
