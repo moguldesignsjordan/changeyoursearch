@@ -39,9 +39,11 @@ import { ENGINE_URLS, DEFAULT_PHRASE } from './constants';
 // ==================== LOGO COMPONENT ====================
 const Logo = () => (
   <div className="absolute top-4 left-4 w-20 h-20 sm:w-24 sm:h-24 pointer-events-none z-10">
-    <div className="w-full h-full rounded-full bg-gradient-to-br from-orange-400 to-amber-600 flex items-center justify-center shadow-lg">
-      <span className="text-3xl sm:text-4xl">🔮</span>
-    </div>
+    <img 
+      src="/metalogo.png" 
+      alt="Change Your Search" 
+      className="w-full h-full object-contain drop-shadow-lg"
+    />
   </div>
 );
 
@@ -514,7 +516,11 @@ const MainApp: React.FC<{ user: User; onLogout: () => void }> = ({ user, onLogou
         {/* Empty state */}
         {records.length === 0 && !metaphysicalLoading && !metaphysicalData && (
           <div className="py-12 text-center">
-            <span className="text-5xl mb-4 block">🔮</span>
+            <img 
+              src="/metalogo.png" 
+              alt="Change Your Search" 
+              className="w-24 h-24 mx-auto mb-4 opacity-50"
+            />
             <p className="text-stone-400">Begin your journey by searching for any crystal, herb, or symbol</p>
           </div>
         )}
