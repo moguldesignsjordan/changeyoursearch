@@ -30,6 +30,37 @@ const getUserRecordsCollection = (userId: string) =>
 const getUserSettingsDoc = (userId: string) => 
   doc(db, "users", userId, SETTINGS_COLLECTION, "preferences");
 
+/**
+ * Remove undefined values from an object (Firestore doesn't accept undefined)
+ */
+function removeUndefined<T extends Record<string, any>>(obj: T): T {
+  const cleaned: Record<string, any> = {};
+  
+  for (const [key, value] of Object.entries(obj)) {
+    if (value === undefined) {
+      continue; // Skip undefined values
+    }
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      // Recursively clean nested objects
+      cleaned[key] = removeUndefined(value);
+    } else if (Array.isArray(value)) {
+      // Clean arrays - remove undefined items and clean objects
+      cleaned[key] = value
+        .filter(item => item !== undefined)
+        .map(item => {
+          if (item !== null && typeof item === 'object') {
+            return removeUndefined(item);
+          }
+          return item;
+        });
+    } else {
+      cleaned[key] = value;
+    }
+  }
+  
+  return cleaned as T;
+}
+
 // ==================== SEARCH RECORDS ====================
 
 /**
@@ -43,11 +74,15 @@ export async function saveRecord(record: SearchRecord): Promise<{ success: boole
 
   try {
     const recordRef = doc(getUserRecordsCollection(user.uid), record.id);
-    await setDoc(recordRef, {
+    
+    // Clean the record to remove undefined values
+    const cleanedRecord = removeUndefined({
       ...record,
       userId: user.uid,
       syncedAt: Date.now(),
     });
+    
+    await setDoc(recordRef, cleanedRecord);
     return { success: true };
   } catch (error: any) {
     console.error("Error saving record:", error);
@@ -70,11 +105,12 @@ export async function saveRecordsBatch(records: SearchRecord[]): Promise<{ succe
 
     records.forEach(record => {
       const recordRef = doc(userRecordsRef, record.id);
-      batch.set(recordRef, {
+      const cleanedRecord = removeUndefined({
         ...record,
         userId: user.uid,
         syncedAt: Date.now(),
       });
+      batch.set(recordRef, cleanedRecord);
     });
 
     await batch.commit();
@@ -113,6 +149,7 @@ export async function getRecords(): Promise<{ success: boolean; data?: SearchRec
         updatedAt: data.updatedAt,
         notes: data.notes,
         searches: data.searches || [],
+        metaphysicalData: data.metaphysicalData,
       });
     });
 
@@ -155,6 +192,7 @@ export function subscribeToRecords(
           updatedAt: data.updatedAt,
           notes: data.notes,
           searches: data.searches || [],
+          metaphysicalData: data.metaphysicalData,
         });
       });
       callback(records);
@@ -198,11 +236,12 @@ export async function saveSettings(settings: UserSettings): Promise<{ success: b
 
   try {
     const settingsRef = getUserSettingsDoc(user.uid);
-    await setDoc(settingsRef, {
+    const cleanedSettings = removeUndefined({
       ...settings,
       userId: user.uid,
       syncedAt: Date.now(),
     });
+    await setDoc(settingsRef, cleanedSettings);
     return { success: true };
   } catch (error: any) {
     console.error("Error saving settings:", error);

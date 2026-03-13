@@ -36,13 +36,17 @@ import {
 } from './types';
 import { ENGINE_URLS, DEFAULT_PHRASE } from './constants';
 
-// ==================== LOGO COMPONENT ====================
-const Logo = () => (
-  <div className="absolute top-4 left-4 w-20 h-20 sm:w-24 sm:h-24 pointer-events-none z-10">
+// ==================== CENTERED LOGO ====================
+const CenteredLogo = ({ size = "large" }: { size?: "small" | "large" }) => (
+  <div className="flex justify-center mb-4">
     <img 
       src="/metalogo.png" 
       alt="Change Your Search" 
-      className="w-full h-full object-contain drop-shadow-lg"
+      className={`object-contain drop-shadow-xl ${
+        size === "large" 
+          ? "w-32 h-32 sm:w-40 sm:h-40" 
+          : "w-24 h-24 sm:w-32 sm:h-32"
+      }`}
     />
   </div>
 );
@@ -395,10 +399,11 @@ const MainApp: React.FC<{ user: User; onLogout: () => void }> = ({ user, onLogou
     return (
       <Layout>
         <div className="flex flex-col items-center justify-center text-white/80">
-          <svg className="animate-spin h-8 w-8 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
+          <img 
+            src="/metalogo.png" 
+            alt="Loading" 
+            className="w-24 h-24 mb-4 animate-pulse"
+          />
           <p className="font-bold tracking-wider">Loading your sacred records...</p>
         </div>
       </Layout>
@@ -407,8 +412,6 @@ const MainApp: React.FC<{ user: User; onLogout: () => void }> = ({ user, onLogou
 
   return (
     <Layout>
-      <Logo />
-      
       {/* Sync indicator */}
       <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
         {syncStatus.isSyncing ? (
@@ -420,7 +423,16 @@ const MainApp: React.FC<{ user: User; onLogout: () => void }> = ({ user, onLogou
         )}
       </div>
 
-      <div className="w-full max-w-2xl mx-auto text-center pt-16 sm:pt-8">
+      <div className="w-full max-w-2xl mx-auto text-center">
+        {/* Centered Logo */}
+        <div className="flex justify-center mb-4">
+          <img 
+            src="/metalogo.png" 
+            alt="Change Your Search" 
+            className="w-24 h-24 sm:w-32 sm:h-32 object-contain drop-shadow-xl"
+          />
+        </div>
+        
         {/* Header */}
         <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tighter uppercase mb-2">
           Change Your Search
@@ -515,12 +527,7 @@ const MainApp: React.FC<{ user: User; onLogout: () => void }> = ({ user, onLogou
 
         {/* Empty state */}
         {records.length === 0 && !metaphysicalLoading && !metaphysicalData && (
-          <div className="py-12 text-center">
-            <img 
-              src="/metalogo.png" 
-              alt="Change Your Search" 
-              className="w-24 h-24 mx-auto mb-4 opacity-50"
-            />
+          <div className="py-8 text-center">
             <p className="text-stone-400">Begin your journey by searching for any crystal, herb, or symbol</p>
           </div>
         )}
@@ -648,10 +655,11 @@ const App: React.FC = () => {
     return (
       <Layout>
         <div className="flex flex-col items-center justify-center text-white/80">
-          <svg className="animate-spin h-8 w-8 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
+          <img 
+            src="/metalogo.png" 
+            alt="Loading" 
+            className="w-24 h-24 mb-4 animate-pulse"
+          />
           <p className="font-bold tracking-wider">Authenticating...</p>
         </div>
       </Layout>
@@ -661,21 +669,23 @@ const App: React.FC = () => {
   if (!user) {
     return (
       <Layout>
-        <Logo />
-        <LoginView
-          onLogin={handleLogin}
-          onRegister={handleRegister}
-          onGoogleSignIn={handleGoogleSignIn}
-          authError={authError}
-          onClearError={() => setAuthError(null)}
-          onResendVerification={handleResendVerification}
-          showVerificationMessage={showVerificationMessage}
-          emailForVerification={emailForVerification}
-          onBackToLogin={() => {
-            setShowVerificationMessage(false);
-            setAuthError(null);
-          }}
-        />
+        <div className="w-full max-w-md mx-auto">
+          <CenteredLogo size="large" />
+          <LoginView
+            onLogin={handleLogin}
+            onRegister={handleRegister}
+            onGoogleSignIn={handleGoogleSignIn}
+            authError={authError}
+            onClearError={() => setAuthError(null)}
+            onResendVerification={handleResendVerification}
+            showVerificationMessage={showVerificationMessage}
+            emailForVerification={emailForVerification}
+            onBackToLogin={() => {
+              setShowVerificationMessage(false);
+              setAuthError(null);
+            }}
+          />
+        </div>
       </Layout>
     );
   }
